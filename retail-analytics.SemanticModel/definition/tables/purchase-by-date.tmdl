@@ -1,0 +1,56 @@
+table purchase-by-date
+	lineageTag: 0238a832-6985-4425-8d60-9ee5236664ca
+
+	measure 'Daily Spend' = SUM('purchase-by-date'[Total Date Purchase])
+		formatString: #,0
+		displayFolder: Spend
+		lineageTag: d35e2357-41ab-402e-85af-aadd448459fd
+
+	measure 'Daily Spend 7d Avg' = AVERAGEX(DATESINPERIOD('Calendar'[Date], MAX('Calendar'[Date]), -7, DAY), [Daily Spend])
+		formatString: #,0
+		displayFolder: Spend
+		lineageTag: 10ccd9a5-5599-4e1b-ae45-bb851883e98f
+
+	column transaction_datetime
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 602ac047-8a7e-47b9-a647-4fc0e1758864
+		summarizeBy: none
+		sourceColumn: transaction_datetime
+
+		variation Variation
+			isDefault
+			relationship: 35d242b3-ccfb-466f-aa1f-06867366a78d
+			defaultHierarchy: LocalDateTable_fdfbb6e0-66f3-446d-a66a-342e46067619.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Total Date Purchase'
+		dataType: double
+		lineageTag: 7fa1f4a9-a95e-4bf4-9b32-75a72f529301
+		summarizeBy: sum
+		sourceColumn: Total Date Purchase
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition purchase-by-date = m
+		mode: import
+		source =
+				// One row per day, built in SQL Server by mart.usp_build_marts
+				let
+				    Source = Sql.Database("localhost,14333", "uplift"),
+				    mart_daily_sales = Source{[Schema = "mart", Item = "daily_sales"]}[Data],
+				    #"Selected Columns" = Table.SelectColumns(mart_daily_sales, {"sales_date", "total_purchase"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Selected Columns", {{"sales_date", "transaction_datetime"}, {"total_purchase", "Total Date Purchase"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"transaction_datetime", type date}, {"Total Date Purchase", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

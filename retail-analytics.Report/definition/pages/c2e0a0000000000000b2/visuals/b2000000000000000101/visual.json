@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "b2000000000000000101",
+  "position": {
+    "x": 340,
+    "y": 110,
+    "z": 201,
+    "height": 140,
+    "width": 300,
+    "tabOrder": 201
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "uplift_train"
+                    }
+                  },
+                  "Property": "Treated Share"
+                }
+              },
+              "queryRef": "uplift_train.Treated Share",
+              "nativeQueryRef": "Treated Share"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

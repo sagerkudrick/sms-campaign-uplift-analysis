@@ -1,0 +1,57 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "b1000000000000000104",
+  "position": {
+    "x": 1534,
+    "y": 100,
+    "z": 204,
+    "height": 130,
+    "width": 356,
+    "tabOrder": 204
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "purchases"
+                    }
+                  },
+                  "Property": "Share Redeeming Points"
+                }
+              },
+              "queryRef": "purchases.Share Redeeming Points",
+              "nativeQueryRef": "Share Redeeming Points",
+              "displayName": "Customers who redeemed points"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "value": [
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

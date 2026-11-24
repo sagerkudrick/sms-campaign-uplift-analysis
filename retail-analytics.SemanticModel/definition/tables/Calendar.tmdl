@@ -1,0 +1,48 @@
+table Calendar
+	lineageTag: 03d94489-58a6-4a74-815e-41dc01120ae4
+	dataCategory: Time
+
+	column Date
+		isUnique
+		lineageTag: 27624037-0152-4589-9b3e-0ebf99a8d1fb
+		isNameInferred
+		sourceColumn: [Date]
+
+	column Year
+		lineageTag: 9e884b14-8e8d-49d9-b30e-d242c76c9bbf
+		isNameInferred
+		sourceColumn: [Year]
+
+	column 'Month No'
+		lineageTag: 4fdec90b-9d84-4d89-b6aa-49331d440f82
+		isNameInferred
+		sourceColumn: [Month No]
+
+	column Month
+		lineageTag: 4752d958-0c6d-4760-8b98-34bad3475318
+		isNameInferred
+		sourceColumn: [Month]
+		sortByColumn: 'Month No'
+
+	column 'Week Start'
+		lineageTag: 0d1aa70d-d742-4691-9808-ed18b37af395
+		isNameInferred
+		sourceColumn: [Week Start]
+
+	column Weekday
+		lineageTag: 939e979b-fca0-44e4-b057-2f2033cc9ed4
+		isNameInferred
+		sourceColumn: [Weekday]
+
+	partition Calendar = calculated
+		mode: import
+		source =
+				ADDCOLUMNS(
+				    CALENDAR(MIN('purchase-by-date'[transaction_datetime]), MAX('purchase-by-date'[transaction_datetime])),
+				    "Year", YEAR([Date]),
+				    "Month No", MONTH([Date]),
+				    "Month", FORMAT([Date], "MMM yyyy"),
+				    "Week Start", [Date] - WEEKDAY([Date], 2) + 1,
+				    "Weekday", FORMAT([Date], "ddd")
+				)
+

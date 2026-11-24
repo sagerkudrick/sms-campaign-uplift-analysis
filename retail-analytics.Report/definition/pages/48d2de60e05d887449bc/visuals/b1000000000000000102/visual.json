@@ -1,0 +1,57 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "b1000000000000000102",
+  "position": {
+    "x": 782,
+    "y": 100,
+    "z": 202,
+    "height": 130,
+    "width": 356,
+    "tabOrder": 202
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "purchases"
+                    }
+                  },
+                  "Property": "Median Transactions per Customer"
+                }
+              },
+              "queryRef": "purchases.Median Transactions per Customer",
+              "nativeQueryRef": "Median Transactions per Customer",
+              "displayName": "Median receipts per customer"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "value": [
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

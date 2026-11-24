@@ -1,0 +1,27 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["purchases","purchase-by-date","uplift_train"]
+
+annotation PBI_ProTooling = ["DaxQueryView_Desktop","MCP-PBIModeling","DevMode"]
+
+ref table purchases
+ref table purchase-by-date
+ref table DateTableTemplate_58737aab-4748-4413-82ad-3e6a8cf137cb
+ref table LocalDateTable_fdfbb6e0-66f3-446d-a66a-342e46067619
+ref table uplift_train
+ref table 'Covariate Balance'
+ref table Calendar
+ref table 'Spend Quartile Cuts'
+ref table clients
+
+ref cultureInfo en-US
+

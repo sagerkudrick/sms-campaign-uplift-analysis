@@ -1,0 +1,64 @@
+/// One row per loyalty-card client, from the SQL view mart.clients. Age outside 14-99 is treated as missing; gender U is shown as 'Not stated'.
+table clients
+	lineageTag: 4cda4a7d-efe1-48df-8625-fe0c49ce4522
+
+	column client_id
+		dataType: string
+		lineageTag: 885e5b69-c47e-4b39-b01f-226dd2ef90a4
+		summarizeBy: none
+		sourceColumn: client_id
+
+	column 'Card Issued'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: c95ddc75-aeb2-47c0-b31d-d0962d80bda4
+		summarizeBy: none
+		sourceColumn: Card Issued
+
+	column 'First Redeemed'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 997b7c46-f5b9-42c2-ba1d-ca86be7a6ba1
+		summarizeBy: none
+		sourceColumn: First Redeemed
+
+	/// Age as recorded, including impossible values.
+	column 'Age (raw)'
+		dataType: int64
+		isHidden
+		lineageTag: 8394c757-bff8-444a-8f91-717f4da3f77e
+		summarizeBy: none
+		sourceColumn: Age (raw)
+
+	column 'Gender (raw)'
+		dataType: string
+		isHidden
+		lineageTag: d529dc2e-d023-42c8-9e8d-98e31f8d8c83
+		summarizeBy: none
+		sourceColumn: Gender (raw)
+
+	/// Age in years; blank when the recorded age is outside 14-99.
+	column Age
+		dataType: int64
+		lineageTag: e89abc0a-fe1e-4d02-a357-8db0fde6ee2f
+		summarizeBy: average
+		sourceColumn: Age
+
+	column Gender
+		dataType: string
+		lineageTag: 5b5e3e1a-455b-40b9-9ff1-bb8ea251bfce
+		summarizeBy: none
+		sourceColumn: Gender
+
+	partition clients = m
+		mode: import
+		source =
+				// Cleaned demographics from the SQL view mart.clients (ages outside 14-99 -> null, gender U -> 'Not stated')
+				let
+				    Source = Sql.Database("localhost,14333", "uplift"),
+				    mart_clients = Source{[Schema = "mart", Item = "clients"]}[Data],
+				    #"Renamed Columns" = Table.RenameColumns(mart_clients, {{"card_issued", "Card Issued"}, {"first_redeemed", "First Redeemed"}, {"age", "Age"}, {"gender", "Gender"}, {"age_raw", "Age (raw)"}, {"gender_raw", "Gender (raw)"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Card Issued", type datetime}, {"First Redeemed", type datetime}, {"Age", Int64.Type}, {"Gender", type text}, {"Age (raw)", Int64.Type}, {"Gender (raw)", type text}})
+				in
+				    #"Changed Type"
+

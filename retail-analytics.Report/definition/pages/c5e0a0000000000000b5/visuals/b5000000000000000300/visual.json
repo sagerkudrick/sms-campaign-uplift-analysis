@@ -1,0 +1,87 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "b5000000000000000300",
+  "position": {
+    "x": 30,
+    "y": 815,
+    "z": 400,
+    "height": 255,
+    "width": 1860,
+    "tabOrder": 400
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "What this suggests",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "1. The SMS lift grows with age: about +1.4 pp for under-25s (CI includes 0) and +1.6 pp for 25-34, rising to +5.9 pp for 65+ (CI +4.8 to +7.0).",
+                    "textStyle": {
+                      "fontSize": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "2. This is not the spend effect in disguise: median spend is similar across age bands, and the youngest clients spend the least yet respond the least.",
+                    "textStyle": {
+                      "fontSize": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "3. Age and spend stack: among clients in the two lower spend quartiles, 65+ gain about +7.8 pp; among higher-spend clients aged 25-34 the lift is under +1 pp (matrix).",
+                    "textStyle": {
+                      "fontSize": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "4. Gender matters less: women +4.0 pp vs men +2.9 pp and not-stated +2.9 pp; the female and male intervals overlap.",
+                    "textStyle": {
+                      "fontSize": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "5. Implication: older, lower-spend clients respond most to the SMS; young and high-spend clients barely respond.",
+                    "textStyle": {
+                      "fontSize": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

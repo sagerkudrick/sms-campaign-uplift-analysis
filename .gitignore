@@ -1,0 +1,19 @@
+# local credentials
+.env
+# large / private data: rebuild with prep_purchases.py or the SQL load scripts
+data/
+*.xlsx
+*.csv
+# Power BI binaries and local caches (the .pbip project folder is committed instead)
+*.pbix
+.pbi/
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+# generated reports
+reports/*.html
+# older working copies of the report
+backup.pbix
+combined*.pbix
+t_stage*.pbix
+# Windows folder settings
+desktop.ini

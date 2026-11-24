@@ -1,0 +1,171 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "b3000000000000000200",
+  "position": {
+    "x": 30,
+    "y": 280,
+    "z": 300,
+    "height": 400,
+    "width": 1100,
+    "tabOrder": 300
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Covariate Balance"
+                    }
+                  },
+                  "Property": "Covariate"
+                }
+              },
+              "queryRef": "Covariate Balance.Covariate",
+              "nativeQueryRef": "Covariate"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Covariate Balance"
+                    }
+                  },
+                  "Property": "Mean Treated"
+                }
+              },
+              "queryRef": "Covariate Balance.Mean Treated",
+              "nativeQueryRef": "Mean Treated"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Covariate Balance"
+                    }
+                  },
+                  "Property": "Mean Control"
+                }
+              },
+              "queryRef": "Covariate Balance.Mean Control",
+              "nativeQueryRef": "Mean Control"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Covariate Balance"
+                    }
+                  },
+                  "Property": "SMD"
+                }
+              },
+              "queryRef": "Covariate Balance.SMD",
+              "nativeQueryRef": "SMD"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Covariate Balance"
+                    }
+                  },
+                  "Property": "p-value"
+                }
+              },
+              "queryRef": "Covariate Balance.p-value",
+              "nativeQueryRef": "p-value"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Covariate Balance"
+                    }
+                  },
+                  "Property": "Clients Treated"
+                }
+              },
+              "queryRef": "Covariate Balance.Clients Treated",
+              "nativeQueryRef": "Clients Treated"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Covariate Balance"
+                    }
+                  },
+                  "Property": "Clients Control"
+                }
+              },
+              "queryRef": "Covariate Balance.Clients Control",
+              "nativeQueryRef": "Clients Control"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Covariate Balance"
+                    }
+                  },
+                  "Property": "Balanced (|SMD| < 0.1)"
+                }
+              },
+              "queryRef": "Covariate Balance.Balanced (|SMD| < 0.1)",
+              "nativeQueryRef": "Balanced (|SMD| < 0.1)"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Pre-Campaign Covariate Balance'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Treated vs. control on purchase history (clients with purchases only)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

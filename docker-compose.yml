@@ -1,0 +1,23 @@
+# Local SQL Server for the SMS uplift project.
+#   docker compose up -d            start it
+#   scripts\setup_db.ps1            create the database, load the CSVs, build the summary tables, run the checks
+# The raw RetailHero CSVs are mounted read-only from UPLIFT_DATA_DIR (default: C:\Users\<you>\Desktop\uplift).
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server:2025-latest
+    container_name: uplift-sql
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"          # free for development and testing
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+    ports:
+      - "14333:1433"                  # non-default host port to avoid clashing with other SQL installs
+    volumes:
+      - uplift-sql-data:/var/opt/mssql
+      - ${UPLIFT_DATA_DIR:-${USERPROFILE}/Desktop/uplift}:/data:ro
+      - ./sql:/sql:ro
+      - ./data:/pydata:ro              # Python output, used only to cross-check the SQL marts
+    restart: unless-stopped
+
+volumes:
+  uplift-sql-data:

@@ -1,0 +1,80 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "b3000000000000000400",
+  "position": {
+    "x": 30,
+    "y": 710,
+    "z": 400,
+    "height": 340,
+    "width": 1860,
+    "tabOrder": 400
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "What the checks mean",
+                    "textStyle": {
+                      "fontSize": "13pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "1. Sample ratio mismatch (SRM): a chi-square test of the treated/control counts against an expected 50/50 split. A p-value above 0.01 means group sizes are consistent with random assignment.",
+                    "textStyle": {
+                      "fontSize": "13pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "2. Covariate balance: if assignment was random, pre-campaign behaviour (spend, points, products) should look the same in both groups. The standardized mean difference (SMD) is the gap between group means in standard-deviation units; below 0.1 is conventionally balanced. It is preferred over p-values here because very large samples make tiny, harmless differences look significant.",
+                    "textStyle": {
+                      "fontSize": "13pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Limits: balance is tested on all 200,039 campaign clients - pre-campaign purchase history plus age and gender from clients.csv (ages outside 14-99 treated as missing). Region is not in the data. Passing these checks supports, but does not prove, random assignment.",
+                    "textStyle": {
+                      "fontSize": "13pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

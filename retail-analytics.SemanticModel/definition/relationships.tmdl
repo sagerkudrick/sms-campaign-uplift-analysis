@@ -1,0 +1,21 @@
+relationship 35d242b3-ccfb-466f-aa1f-06867366a78d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: purchase-by-date.transaction_datetime
+	toColumn: LocalDateTable_fdfbb6e0-66f3-446d-a66a-342e46067619.Date
+
+relationship AutoDetected_86b30343-4852-4bde-ab48-6dd3669bcbbd
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: purchases.client_id
+	toColumn: uplift_train.client_id
+
+relationship purchase-by-date_transaction_datetime_Calendar_Date
+	fromColumn: purchase-by-date.transaction_datetime
+	toColumn: Calendar.Date
+
+relationship clients_uplift_train
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: uplift_train.client_id
+	toColumn: clients.client_id
+

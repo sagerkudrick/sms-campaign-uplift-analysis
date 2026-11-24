@@ -1,0 +1,36 @@
+/// Pre-campaign spend quartile cut points (rubles), computed once over campaign clients that have purchase history. Used by purchases[Spend Quartile No] / [Spend Quartile].
+table 'Spend Quartile Cuts'
+	isHidden
+	lineageTag: 75dad714-cb0a-4899-8261-6d439e70d00b
+
+	column Q1
+		lineageTag: 720783ea-88bc-4668-b61d-c3ffcb4a54e1
+		isNameInferred
+		sourceColumn: [Q1]
+
+	column Q2
+		lineageTag: a2e289a3-4ba4-4049-a2c2-05733c1b6328
+		isNameInferred
+		sourceColumn: [Q2]
+
+	column Q3
+		lineageTag: 4de0bec0-7f1b-4e46-8ce3-0d3b08d5c95f
+		isNameInferred
+		sourceColumn: [Q3]
+
+	partition 'Spend Quartile Cuts' = calculated
+		mode: import
+		source =
+				VAR _hist =
+				    FILTER(
+				        ALL(purchases[client_id], purchases[Total Purchase]),
+				        NOT ISBLANK(purchases[client_id])  -- skip the blank member a 1:1 relationship adds for unmatched keys
+				            && purchases[client_id] IN VALUES(uplift_train[client_id])
+				    )
+				RETURN
+				    ROW(
+				        "Q1", PERCENTILEX.INC(_hist, purchases[Total Purchase], 0.25),
+				        "Q2", PERCENTILEX.INC(_hist, purchases[Total Purchase], 0.50),
+				        "Q3", PERCENTILEX.INC(_hist, purchases[Total Purchase], 0.75)
+				    )
+

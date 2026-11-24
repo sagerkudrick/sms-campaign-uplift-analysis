@@ -1,0 +1,427 @@
+cultureInfo en-US
+
+	linguisticMetadata =
+			{
+			  "Version": "2.0.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "purchases.customers_with_purchases": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "purchases",
+			          "ConceptualProperty": "Customers With Purchases"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Customers in purchase history": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Customers": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "purchases.median_spend_per_customer": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "purchases",
+			          "ConceptualProperty": "Median Spend per Customer"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Median spend per customer (RUB)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "purchases.share_redeeming_points": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "purchases",
+			          "ConceptualProperty": "Share Redeeming Points"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Customers who redeemed points": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "purchases.spend_band": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "purchases",
+			          "ConceptualProperty": "Spend Band"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Spend band (RUB)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "purchases.client_id": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "purchases",
+			          "ConceptualProperty": "client_id"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Customer": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "uplift_train.clients_with_purchase_history": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "uplift_train",
+			          "ConceptualProperty": "Clients With Purchase History"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "...of which in SMS campaign": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "uplift_train.purchase_history_coverage": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "uplift_train",
+			          "ConceptualProperty": "Purchase History Coverage"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "uplift_train.sms_group": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "uplift_train",
+			          "ConceptualProperty": "SMS Group"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "SMS group": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "uplift_train.converted": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "uplift_train",
+			          "ConceptualProperty": "Converted"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Converted": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "uplift_train.spend_segment": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "uplift_train",
+			          "ConceptualProperty": "Spend Segment"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Pre-campaign spend quartile (RUB)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Spend quartile": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "uplift_train.conversion_rate_treated": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "uplift_train",
+			          "ConceptualProperty": "Conversion Rate Treated"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Received SMS": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "SMS conv.": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "uplift_train.conversion_rate_control": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "uplift_train",
+			          "ConceptualProperty": "Conversion Rate Control"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Control": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Control conv.": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "uplift_train.points_segment": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "uplift_train",
+			          "ConceptualProperty": "Points Segment"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Loyalty points behaviour": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Points behaviour": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "uplift_train.uplift_ci_low": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "uplift_train",
+			          "ConceptualProperty": "Uplift CI Low"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "95% CI low": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "uplift_train.uplift_ci_high": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "uplift_train",
+			          "ConceptualProperty": "Uplift CI High"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "95% CI high": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "purchases.median_transactions_per_customer": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "purchases",
+			          "ConceptualProperty": "Median Transactions per Customer"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Median receipts per customer": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "uplift_train.age_segment": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "uplift_train",
+			          "ConceptualProperty": "Age Segment"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Age band": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "uplift_train.gender_segment": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "uplift_train",
+			          "ConceptualProperty": "Gender Segment"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Gender": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    }
+			  }
+			}
+		contentType: json
+

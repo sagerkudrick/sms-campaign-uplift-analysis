@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "b2000000000000000401",
+  "position": {
+    "x": 1450,
+    "y": 280,
+    "z": 401,
+    "height": 150,
+    "width": 440,
+    "tabOrder": 401
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "uplift_train"
+                    }
+                  },
+                  "Property": "Uplift CI High"
+                }
+              },
+              "queryRef": "uplift_train.Uplift CI High",
+              "nativeQueryRef": "Uplift CI High"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

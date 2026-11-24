@@ -1,0 +1,219 @@
+table uplift_train
+	lineageTag: 9a86289d-32ec-4601-a357-8d8e8f047b03
+
+	measure 'Did Not Receive Text' = CALCULATE(COUNTROWS('uplift_train'), 'uplift_train'[treatment_flg] == 0)
+		formatString: 0
+		lineageTag: 8404634d-35b2-47ed-a310-8c9e6d16da3a
+
+	measure 'Received Text' = CALCULATE(COUNTROWS('uplift_train'), 'uplift_train'[treatment_flg] == 1)
+		formatString: 0
+		lineageTag: 4792b3be-f640-48fc-8217-bc77d80fa50a
+
+	measure Clients = COUNTROWS(uplift_train)
+		formatString: #,0
+		displayFolder: Campaign Effect
+		lineageTag: abece8b3-f1ea-4835-a027-b75cd050e8c3
+
+	measure 'Treated Share' = DIVIDE([Received Text], [Clients])
+		formatString: 0.00%
+		displayFolder: Campaign Effect
+		lineageTag: ea7e0643-b662-44b6-b8d1-65ade3108dec
+
+	/// Share of clients with target = 1 (post-campaign response).
+	measure 'Conversion Rate' = AVERAGE(uplift_train[target])
+		formatString: 0.00%
+		displayFolder: Campaign Effect
+		lineageTag: 483a0593-7ff8-415f-9814-92c0713c3d66
+
+	measure 'Conversion Rate Treated' = CALCULATE(AVERAGE(uplift_train[target]), uplift_train[treatment_flg] == 1)
+		formatString: 0.00%
+		displayFolder: Campaign Effect
+		lineageTag: e67a36c2-5be9-45e3-a4a0-322650451d3b
+
+	measure 'Conversion Rate Control' = CALCULATE(AVERAGE(uplift_train[target]), uplift_train[treatment_flg] == 0)
+		formatString: 0.00%
+		displayFolder: Campaign Effect
+		lineageTag: 63539c99-3b3a-4098-b37b-a540b92aac0f
+
+	/// Treated conversion rate minus control conversion rate (average treatment effect).
+	measure Uplift = [Conversion Rate Treated] - [Conversion Rate Control]
+		formatString: 0.00%;-0.00%
+		displayFolder: Campaign Effect
+		lineageTag: c03a8084-c9fd-4f5a-b9c2-1916ddf3b146
+
+	measure 'Uplift Std Error' =
+			VAR p1 = [Conversion Rate Treated]
+			VAR p0 = [Conversion Rate Control]
+			RETURN SQRT(DIVIDE(p1 * (1 - p1), [Received Text]) + DIVIDE(p0 * (1 - p0), [Did Not Receive Text]))
+		formatString: 0.0000%
+		displayFolder: Campaign Effect
+		lineageTag: 20200b4b-1d2c-4ef6-ae83-b46cecc0da3b
+
+	measure 'Uplift CI Low' = [Uplift] - 1.96 * [Uplift Std Error]
+		formatString: 0.00%;-0.00%
+		displayFolder: Campaign Effect
+		lineageTag: 1c7f5385-416a-4046-8431-15961b38df80
+
+	measure 'Uplift CI High' = [Uplift] + 1.96 * [Uplift Std Error]
+		formatString: 0.00%;-0.00%
+		displayFolder: Campaign Effect
+		lineageTag: 8f66d389-432f-4f92-a3ed-a39a63fb5606
+
+	/// Two-sided z-test for difference in proportions.
+	measure 'Uplift p-value' = 2 * (1 - NORM.S.DIST(ABS(DIVIDE([Uplift], [Uplift Std Error])), TRUE))
+		formatString: 0.0000
+		displayFolder: Campaign Effect
+		lineageTag: f9e3518c-44a0-461d-8aac-f12cb165781c
+
+	/// Sample-ratio-mismatch test: do group sizes match an expected 50/50 split?
+	measure 'SRM Chi-Square' =
+			VAR n = [Clients]
+			VAR e = n / 2
+			RETURN DIVIDE(([Received Text] - e) ^ 2, e) + DIVIDE(([Did Not Receive Text] - e) ^ 2, e)
+		formatString: 0.000
+		displayFolder: Randomization Check
+		lineageTag: 9059102e-c397-4914-b6c0-2d8c76a7961c
+
+	/// p-value of the SRM test (1 degree of freedom). Below 0.01 suggests the split was not 50/50.
+	measure 'SRM p-value' = CHISQ.DIST.RT([SRM Chi-Square], 1)
+		formatString: 0.0000
+		displayFolder: Randomization Check
+		lineageTag: 0b285957-0b3e-4230-8f47-25532db035b1
+
+	/// Largest absolute standardized mean difference across pre-campaign covariates.
+	measure 'Max Abs SMD' = MAXX('Covariate Balance', ABS('Covariate Balance'[SMD]))
+		formatString: 0.000
+		displayFolder: Randomization Check
+		lineageTag: 8eb12b04-3aee-44a9-ba69-1e0659d22b0b
+
+	/// Passes if group sizes are consistent with 50/50 (SRM p >= 0.01) and every pre-campaign covariate has |SMD| < 0.1.
+	measure 'Randomization Verdict' = IF([SRM p-value] >= 0.01 && [Max Abs SMD] < 0.1, "Consistent with random assignment", "Possible randomization problem - investigate")
+		displayFolder: Randomization Check
+		lineageTag: 3a5987f5-4871-4a25-8f27-9bd7ce234296
+
+	/// Campaign clients that have at least one row in purchases.
+	measure 'Clients With Purchase History' = COUNTROWS(FILTER(uplift_train, NOT ISBLANK(RELATED(purchases[client_id]))))
+		formatString: #,0
+		displayFolder: Data Quality
+		lineageTag: c2726c35-0e67-4a63-9152-5ec46cfc4f47
+
+	measure 'Purchase History Coverage' = DIVIDE([Clients With Purchase History], [Clients])
+		formatString: 0.0%
+		displayFolder: Data Quality
+		lineageTag: 41ca01d8-385d-46a9-94b4-78bb619318e2
+
+	column client_id
+		dataType: string
+		lineageTag: 505b0bd8-be88-4dc0-9854-78fbfafba41b
+		summarizeBy: none
+		sourceColumn: client_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column treatment_flg
+		dataType: int64
+		formatString: 0
+		lineageTag: cd915aa5-ccee-401e-99fd-b402939a36c3
+		summarizeBy: sum
+		sourceColumn: treatment_flg
+
+		annotation SummarizationSetBy = Automatic
+
+	column target
+		dataType: int64
+		formatString: 0
+		lineageTag: 4898fbf6-7dab-45d8-93e0-7755561b60ba
+		summarizeBy: sum
+		sourceColumn: target
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'SMS Group' = IF(uplift_train[treatment_flg] = 1, "Received SMS", "Control")
+		dataType: string
+		displayFolder: Segments
+		lineageTag: 6fba1f8d-2ce7-4921-8f0c-34b045cc230d
+		summarizeBy: none
+
+	column Converted = IF(uplift_train[target] = 1, "Yes", "No")
+		dataType: string
+		displayFolder: Segments
+		lineageTag: 89684c3a-dbaf-466f-8141-e10356a01713
+		summarizeBy: none
+
+	column 'Spend Segment Order' = VAR _q = RELATED(purchases[Spend Quartile No]) RETURN IF(ISBLANK(_q), 5, _q)
+		dataType: int64
+		isHidden
+		displayFolder: Segments
+		lineageTag: a93cdbea-7228-466b-8d4e-83dbda14f905
+		summarizeBy: none
+
+	column 'Points Segment Order' = VAR _id = RELATED(purchases[client_id]) RETURN IF(ISBLANK(_id), 3, IF(RELATED(purchases[Total Points Spent]) > 0, 2, 1))
+		dataType: int64
+		isHidden
+		displayFolder: Segments
+		lineageTag: ac02e979-c0db-4ada-93f8-899a22b6de91
+		summarizeBy: none
+
+	/// Pre-campaign spend quartile for campaign clients; 'No purchase history' for clients missing from the purchases extract.
+	column 'Spend Segment' = VAR _q = RELATED(purchases[Spend Quartile]) RETURN IF(ISBLANK(_q), "No purchase history", _q)
+		dataType: string
+		displayFolder: Segments
+		lineageTag: fe1be7df-9108-4462-ab64-476c3f305566
+		summarizeBy: none
+		sortByColumn: 'Spend Segment Order'
+
+	/// Whether the client spent any regular loyalty points before the campaign.
+	column 'Points Segment' = SWITCH(uplift_train[Points Segment Order], 1, "Never redeemed points", 2, "Redeemed points", "No purchase history")
+		dataType: string
+		displayFolder: Segments
+		lineageTag: 5f23326b-01b1-4614-9867-db51f0c79d48
+		summarizeBy: none
+		sortByColumn: 'Points Segment Order'
+
+	column 'Age Segment Order' =
+			VAR _a = RELATED(clients[Age])
+			RETURN SWITCH(TRUE(), ISBLANK(_a), 7, _a < 25, 1, _a < 35, 2, _a < 45, 3, _a < 55, 4, _a < 65, 5, 6)
+		dataType: int64
+		isHidden
+		displayFolder: Segments
+		lineageTag: 327b926b-5fb1-4e1a-94fc-da34f71d18f1
+		summarizeBy: none
+
+	column 'Gender Segment Order' = SWITCH(RELATED(clients[Gender]), "Female", 1, "Male", 2, 3)
+		dataType: int64
+		isHidden
+		displayFolder: Segments
+		lineageTag: 689352e1-f0a4-4184-9152-028e0dc330dc
+		summarizeBy: none
+
+	/// Age band from clients.csv; 'Unknown age' when the recorded age is outside 14-99.
+	column 'Age Segment' = SWITCH(uplift_train[Age Segment Order], 1, "Under 25", 2, "25-34", 3, "35-44", 4, "45-54", 5, "55-64", 6, "65+", "Unknown age")
+		dataType: string
+		displayFolder: Segments
+		lineageTag: a68d10c1-1589-4f1a-8531-2f88a5938fb4
+		summarizeBy: none
+		sortByColumn: 'Age Segment Order'
+
+	/// Gender from clients.csv; 'Not stated' when recorded as U.
+	column 'Gender Segment' = SWITCH(uplift_train[Gender Segment Order], 1, "Female", 2, "Male", "Not stated")
+		dataType: string
+		displayFolder: Segments
+		lineageTag: b4854685-cc1d-45a9-a327-28fd3ff890fd
+		summarizeBy: none
+		sortByColumn: 'Gender Segment Order'
+
+	partition uplift_train = m
+		mode: import
+		source =
+				// Campaign assignment and outcome, loaded from uplift_train.csv by ops.usp_load_raw
+				let
+				    Source = Sql.Database("localhost,14333", "uplift"),
+				    raw_uplift_train = Source{[Schema = "raw", Item = "uplift_train"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(raw_uplift_train, {{"client_id", type text}, {"treatment_flg", Int64.Type}, {"target", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,195 @@
+table purchases
+	lineageTag: df852ad7-7d4b-4a2c-9afe-8b9d91e459a1
+
+	measure 'Total Spend' = SUM(purchases[Total Purchase])
+		formatString: #,0
+		displayFolder: Spend
+		lineageTag: 917c6d45-eeb1-4778-ad18-1c5cfc804c4f
+
+	measure 'Customers With Purchases' = DISTINCTCOUNT(purchases[client_id])
+		formatString: #,0
+		displayFolder: Spend
+		lineageTag: d7c8b8bc-5d13-488a-bfd9-119e01ac0124
+
+	measure 'Avg Spend per Customer' = DIVIDE([Total Spend], [Customers With Purchases])
+		formatString: #,0.00
+		displayFolder: Spend
+		lineageTag: 4c1536de-fa38-48ea-8682-c4cfb8d8466f
+
+	measure 'Points Spent to Received Ratio' = DIVIDE(SUM(purchases[Total Points Spent]), SUM(purchases[Total Points Received]))
+		formatString: 0.00
+		displayFolder: Spend
+		lineageTag: 27e46ce3-93ec-458b-bcae-b05760f0cd70
+
+	measure 'Bad Value Rows' = COUNTROWS(FILTER(purchases, purchases[Check Values] = "BAD VALUE"))
+		formatString: #,0
+		displayFolder: Data Quality
+		lineageTag: ee5c5399-f942-4c5e-92e2-8351d8af884d
+
+	measure 'Median Spend per Customer' = MEDIAN(purchases[Total Purchase])
+		formatString: #,0
+		displayFolder: Spend
+		lineageTag: bb5735ea-b9e2-4674-8e01-9b1e3c201a64
+
+	/// Share of customers who spent any regular loyalty points in the purchase history.
+	measure 'Share Redeeming Points' = DIVIDE(COUNTROWS(FILTER(purchases, purchases[Total Points Spent] > 0)), COUNTROWS(purchases))
+		formatString: 0%
+		displayFolder: Spend
+		lineageTag: 06d7643b-4cde-4eb3-a5db-f7b7b5579cd1
+
+	measure 'Share of Total Spend' = DIVIDE([Total Spend], CALCULATE([Total Spend], ALL(purchases)))
+		formatString: 0.0%
+		displayFolder: Spend
+		lineageTag: 69b5e637-7652-4877-a220-581e59b61d4b
+
+	/// Median number of purchase receipts per customer in the pre-campaign history.
+	measure 'Median Transactions per Customer' = MEDIAN(purchases[Transactions])
+		formatString: #,0
+		displayFolder: Spend
+		lineageTag: fd985209-6988-47cf-acc7-b3257794dc63
+
+	column client_id
+		dataType: string
+		lineageTag: b347ce71-414b-4433-afe9-aa8f9d3e46e9
+		summarizeBy: none
+		sourceColumn: client_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Points Received'
+		dataType: double
+		formatString: #,0
+		lineageTag: 26190a8d-5c2e-47ce-986d-44c4e527c7dc
+		summarizeBy: sum
+		sourceColumn: Total Points Received
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Total Points Spent'
+		dataType: double
+		formatString: #,0
+		lineageTag: 41716ac3-6848-4288-9d4d-49a5835ea0f4
+		summarizeBy: sum
+		sourceColumn: Total Points Spent
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Total Express Received'
+		dataType: double
+		formatString: #,0
+		lineageTag: f0458cbf-3f2f-4fa8-940f-3e5229789353
+		summarizeBy: sum
+		sourceColumn: Total Express Received
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Total Express Spent'
+		dataType: double
+		formatString: #,0
+		lineageTag: 9cce2fd0-3e69-4707-8997-f4ad9f6e9bf5
+		summarizeBy: sum
+		sourceColumn: Total Express Spent
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Total Product Bought'
+		dataType: double
+		formatString: #,0
+		lineageTag: ce3095db-c49a-467c-a304-ac8b5d36149e
+		summarizeBy: sum
+		sourceColumn: Total Product Bought
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Total Purchase'
+		dataType: double
+		formatString: #,0
+		lineageTag: 32fc4f40-ba60-4584-a20c-5ee0a6f3eb3e
+		summarizeBy: sum
+		sourceColumn: Total Purchase
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Check Values'
+		dataType: string
+		isHidden
+		lineageTag: a75f2f3b-af22-4a6b-9c9e-6021bb999cf2
+		summarizeBy: none
+		sourceColumn: Check Values
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Spend Band Order' = SWITCH(TRUE(), purchases[Total Purchase] < 2000, 1, purchases[Total Purchase] < 5000, 2, purchases[Total Purchase] < 10000, 3, purchases[Total Purchase] < 20000, 4, 5)
+		dataType: int64
+		isHidden
+		displayFolder: Segments
+		lineageTag: e80ec3eb-8bf0-448a-a263-72d3c3375487
+		summarizeBy: none
+
+	/// Total pre-campaign spend per customer (rubles), banded.
+	column 'Spend Band' = SWITCH(purchases[Spend Band Order], 1, "Under 2k", 2, "2k-5k", 3, "5k-10k", 4, "10k-20k", "20k+")
+		dataType: string
+		displayFolder: Segments
+		lineageTag: b62486f2-bfc2-438a-904b-f22265b157a9
+		summarizeBy: none
+		sortByColumn: 'Spend Band Order'
+
+	/// Spend quartile, with cut points taken from campaign clients that have purchase history.
+	column 'Spend Quartile No' =
+			VAR _s = purchases[Total Purchase]
+			RETURN SWITCH(TRUE(), _s <= MAX('Spend Quartile Cuts'[Q1]), 1, _s <= MAX('Spend Quartile Cuts'[Q2]), 2, _s <= MAX('Spend Quartile Cuts'[Q3]), 3, 4)
+		dataType: int64
+		isHidden
+		displayFolder: Segments
+		lineageTag: 60865e98-6f4e-41bd-b525-86090d36eee2
+		summarizeBy: none
+
+	/// Pre-campaign spend quartile (rubles). Cut points from campaign clients with purchase history.
+	column 'Spend Quartile' =
+			VAR _q1 = FORMAT(MAX('Spend Quartile Cuts'[Q1]), "#,0")
+			VAR _q2 = FORMAT(MAX('Spend Quartile Cuts'[Q2]), "#,0")
+			VAR _q3 = FORMAT(MAX('Spend Quartile Cuts'[Q3]), "#,0")
+			RETURN SWITCH(purchases[Spend Quartile No], 1, "Q1: under " & _q1, 2, "Q2: " & _q1 & "-" & _q2, 3, "Q3: " & _q2 & "-" & _q3, "Q4: over " & _q3)
+		dataType: string
+		displayFolder: Segments
+		lineageTag: 8541db9e-19eb-4cec-a3d5-7e50618f608c
+		summarizeBy: none
+		sortByColumn: 'Spend Quartile No'
+
+	/// Number of purchase transactions (receipts) in the pre-campaign history.
+	column Transactions
+		dataType: int64
+		formatString: #,0
+		lineageTag: 549f83fa-3973-4059-8454-b371c7c915d2
+		summarizeBy: sum
+		sourceColumn: Transactions
+
+	partition purchases = m
+		mode: import
+		source =
+				// One row per customer, built in SQL Server by mart.usp_build_marts (see sql/03_build_marts.sql)
+				let
+				    Source = Sql.Database("localhost,14333", "uplift"),
+				    mart_client_purchases = Source{[Schema = "mart", Item = "client_purchases"]}[Data],
+				    #"Renamed Columns" = Table.RenameColumns(mart_client_purchases, {{"total_points_received", "Total Points Received"}, {"total_points_spent", "Total Points Spent"}, {"total_express_received", "Total Express Received"}, {"total_express_spent", "Total Express Spent"}, {"total_product_bought", "Total Product Bought"}, {"total_purchase", "Total Purchase"}, {"transactions", "Transactions"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Total Points Received", type number}, {"Total Points Spent", type number}, {"Total Express Received", type number}, {"Total Express Spent", type number}, {"Total Product Bought", type number}, {"Total Purchase", type number}, {"Transactions", Int64.Type}}),
+				    #"Added Custom" = Table.AddColumn(#"Changed Type", "Check Values", each if [Total Purchase] = null then "BAD VALUE" else "OK", type text)
+				in
+				    #"Added Custom"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

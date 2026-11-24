@@ -1,0 +1,162 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "b5000000000000000201",
+  "position": {
+    "x": 645,
+    "y": 492,
+    "z": 310,
+    "height": 310,
+    "width": 560,
+    "tabOrder": 310
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "uplift_train"
+                    }
+                  },
+                  "Property": "Gender Segment"
+                }
+              },
+              "queryRef": "uplift_train.Gender Segment",
+              "nativeQueryRef": "Gender Segment",
+              "displayName": "Gender"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "uplift_train"
+                    }
+                  },
+                  "Property": "Clients"
+                }
+              },
+              "queryRef": "uplift_train.Clients",
+              "nativeQueryRef": "Clients"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "uplift_train"
+                    }
+                  },
+                  "Property": "Conversion Rate Treated"
+                }
+              },
+              "queryRef": "uplift_train.Conversion Rate Treated",
+              "nativeQueryRef": "Conversion Rate Treated",
+              "displayName": "SMS conv."
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "uplift_train"
+                    }
+                  },
+                  "Property": "Conversion Rate Control"
+                }
+              },
+              "queryRef": "uplift_train.Conversion Rate Control",
+              "nativeQueryRef": "Conversion Rate Control",
+              "displayName": "Control conv."
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "uplift_train"
+                    }
+                  },
+                  "Property": "Uplift"
+                }
+              },
+              "queryRef": "uplift_train.Uplift",
+              "nativeQueryRef": "Uplift"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "uplift_train"
+                    }
+                  },
+                  "Property": "Uplift CI Low"
+                }
+              },
+              "queryRef": "uplift_train.Uplift CI Low",
+              "nativeQueryRef": "Uplift CI Low",
+              "displayName": "95% CI low"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "uplift_train"
+                    }
+                  },
+                  "Property": "Uplift CI High"
+                }
+              },
+              "queryRef": "uplift_train.Uplift CI High",
+              "nativeQueryRef": "Uplift CI High",
+              "displayName": "95% CI high"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Uplift by Gender'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Interval that excludes 0 = effect distinguishable from noise'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "b3000000000000000104",
+  "position": {
+    "x": 960,
+    "y": 110,
+    "z": 203,
+    "height": 140,
+    "width": 300,
+    "tabOrder": 203
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "uplift_train"
+                    }
+                  },
+                  "Property": "Max Abs SMD"
+                }
+              },
+              "queryRef": "uplift_train.Max Abs SMD",
+              "nativeQueryRef": "Max Abs SMD"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

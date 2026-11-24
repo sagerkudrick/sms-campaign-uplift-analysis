@@ -1,0 +1,91 @@
+/// Pre-campaign balance check: treated vs control on purchase history (purchases) and demographics (clients). SMD = standardized mean difference; |SMD| < 0.1 is conventionally balanced. Gender rows compare the share of each group with that gender.
+table 'Covariate Balance'
+	lineageTag: 8313c1de-7655-44cd-be26-b670fe780f84
+
+	column Covariate
+		lineageTag: ebcb50af-6209-4380-92ef-78618acd6ccb
+		isNameInferred
+		sourceColumn: [Covariate]
+
+	column 'Mean Treated'
+		lineageTag: 674f5f38-22dc-4488-b261-57bba85e8fdc
+		isNameInferred
+		sourceColumn: [Mean Treated]
+
+	column 'Mean Control'
+		lineageTag: 80d2a27f-d8b3-4b06-baf3-edc88206b833
+		isNameInferred
+		sourceColumn: [Mean Control]
+
+	column SMD
+		lineageTag: b3985801-5a00-4d40-bd5e-fa26b21fe374
+		isNameInferred
+		sourceColumn: [SMD]
+
+	column p-value
+		lineageTag: 1418e959-a9d6-4306-bb1a-f3516bafcf2f
+		isNameInferred
+		sourceColumn: [p-value]
+
+	column 'Clients Treated'
+		lineageTag: bf886823-a5b2-4a7f-8020-fdaf331c14ce
+		isNameInferred
+		sourceColumn: [Clients Treated]
+
+	column 'Clients Control'
+		lineageTag: cd91e1e5-8bb1-49f4-a5f6-1bea200cee6c
+		isNameInferred
+		sourceColumn: [Clients Control]
+
+	column 'Balanced (|SMD| < 0.1)'
+		lineageTag: 65284f70-d42d-49a2-a2e7-359570181d6e
+		isNameInferred
+		sourceColumn: [Balanced (|SMD| < 0.1)]
+
+	partition 'Covariate Balance' = calculated
+		mode: import
+		source =
+				-- strict ==: plain = would also match BLANK (customers not in the campaign)
+				VAR _T = CALCULATETABLE(purchases, uplift_train[treatment_flg] == 1)
+				VAR _C = CALCULATETABLE(purchases, uplift_train[treatment_flg] == 0)
+				VAR _nT = COUNTROWS(_T)
+				VAR _nC = COUNTROWS(_C)
+				VAR _DemT = CALCULATETABLE(clients, uplift_train[treatment_flg] == 1)
+				VAR _DemC = CALCULATETABLE(clients, uplift_train[treatment_flg] == 0)
+				VAR _AgeT = FILTER(_DemT, NOT ISBLANK(clients[Age]))
+				VAR _AgeC = FILTER(_DemC, NOT ISBLANK(clients[Age]))
+				VAR _nDemT = COUNTROWS(_DemT)
+				VAR _nDemC = COUNTROWS(_DemC)
+				VAR _Base =
+				    UNION(
+				        ROW("Covariate", "Total Purchase", "Mean Treated", AVERAGEX(_T, purchases[Total Purchase]), "Mean Control", AVERAGEX(_C, purchases[Total Purchase]), "Var Treated", VARX.S(_T, purchases[Total Purchase]), "Var Control", VARX.S(_C, purchases[Total Purchase]), "N Treated", _nT, "N Control", _nC),
+				        ROW("Covariate", "Points Received", "Mean Treated", AVERAGEX(_T, purchases[Total Points Received]), "Mean Control", AVERAGEX(_C, purchases[Total Points Received]), "Var Treated", VARX.S(_T, purchases[Total Points Received]), "Var Control", VARX.S(_C, purchases[Total Points Received]), "N Treated", _nT, "N Control", _nC),
+				        ROW("Covariate", "Points Spent", "Mean Treated", AVERAGEX(_T, purchases[Total Points Spent]), "Mean Control", AVERAGEX(_C, purchases[Total Points Spent]), "Var Treated", VARX.S(_T, purchases[Total Points Spent]), "Var Control", VARX.S(_C, purchases[Total Points Spent]), "N Treated", _nT, "N Control", _nC),
+				        ROW("Covariate", "Express Received", "Mean Treated", AVERAGEX(_T, purchases[Total Express Received]), "Mean Control", AVERAGEX(_C, purchases[Total Express Received]), "Var Treated", VARX.S(_T, purchases[Total Express Received]), "Var Control", VARX.S(_C, purchases[Total Express Received]), "N Treated", _nT, "N Control", _nC),
+				        ROW("Covariate", "Express Spent", "Mean Treated", AVERAGEX(_T, purchases[Total Express Spent]), "Mean Control", AVERAGEX(_C, purchases[Total Express Spent]), "Var Treated", VARX.S(_T, purchases[Total Express Spent]), "Var Control", VARX.S(_C, purchases[Total Express Spent]), "N Treated", _nT, "N Control", _nC),
+				        ROW("Covariate", "Products Bought", "Mean Treated", AVERAGEX(_T, purchases[Total Product Bought]), "Mean Control", AVERAGEX(_C, purchases[Total Product Bought]), "Var Treated", VARX.S(_T, purchases[Total Product Bought]), "Var Control", VARX.S(_C, purchases[Total Product Bought]), "N Treated", _nT, "N Control", _nC),
+				        ROW("Covariate", "Receipts", "Mean Treated", AVERAGEX(_T, purchases[Transactions]), "Mean Control", AVERAGEX(_C, purchases[Transactions]), "Var Treated", VARX.S(_T, purchases[Transactions]), "Var Control", VARX.S(_C, purchases[Transactions]), "N Treated", _nT, "N Control", _nC),
+				        ROW("Covariate", "Age", "Mean Treated", AVERAGEX(_AgeT, clients[Age]), "Mean Control", AVERAGEX(_AgeC, clients[Age]), "Var Treated", VARX.S(_AgeT, clients[Age]), "Var Control", VARX.S(_AgeC, clients[Age]), "N Treated", COUNTROWS(_AgeT), "N Control", COUNTROWS(_AgeC)),
+				        ROW("Covariate", "Female (share)", "Mean Treated", AVERAGEX(_DemT, IF(clients[Gender] = "Female", 1, 0)), "Mean Control", AVERAGEX(_DemC, IF(clients[Gender] = "Female", 1, 0)), "Var Treated", VARX.S(_DemT, IF(clients[Gender] = "Female", 1, 0)), "Var Control", VARX.S(_DemC, IF(clients[Gender] = "Female", 1, 0)), "N Treated", _nDemT, "N Control", _nDemC),
+				        ROW("Covariate", "Male (share)", "Mean Treated", AVERAGEX(_DemT, IF(clients[Gender] = "Male", 1, 0)), "Mean Control", AVERAGEX(_DemC, IF(clients[Gender] = "Male", 1, 0)), "Var Treated", VARX.S(_DemT, IF(clients[Gender] = "Male", 1, 0)), "Var Control", VARX.S(_DemC, IF(clients[Gender] = "Male", 1, 0)), "N Treated", _nDemT, "N Control", _nDemC),
+				        ROW("Covariate", "Gender not stated (share)", "Mean Treated", AVERAGEX(_DemT, IF(clients[Gender] = "Not stated", 1, 0)), "Mean Control", AVERAGEX(_DemC, IF(clients[Gender] = "Not stated", 1, 0)), "Var Treated", VARX.S(_DemT, IF(clients[Gender] = "Not stated", 1, 0)), "Var Control", VARX.S(_DemC, IF(clients[Gender] = "Not stated", 1, 0)), "N Treated", _nDemT, "N Control", _nDemC)
+				    )
+				VAR _WithStats =
+				    ADDCOLUMNS(
+				        _Base,
+				        "SMD", DIVIDE([Mean Treated] - [Mean Control], SQRT(([Var Treated] + [Var Control]) / 2)),
+				        "Welch Z", DIVIDE([Mean Treated] - [Mean Control], SQRT(DIVIDE([Var Treated], [N Treated]) + DIVIDE([Var Control], [N Control])))
+				    )
+				RETURN
+				    SELECTCOLUMNS(
+				        _WithStats,
+				        "Covariate", [Covariate],
+				        "Mean Treated", [Mean Treated],
+				        "Mean Control", [Mean Control],
+				        "SMD", [SMD],
+				        "p-value", 2 * (1 - NORM.S.DIST(ABS([Welch Z]), TRUE)),
+				        "Clients Treated", [N Treated],
+				        "Clients Control", [N Control],
+				        "Balanced (|SMD| < 0.1)", IF(ABS([SMD]) < 0.1, "Yes", "No")
+				    )
+
